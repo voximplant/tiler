@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoxTiler playground</title>
+
+  <style>
+      html {
+          padding: 0;
+          margin: 0;
+          background: #5729d0;
+          font-family: sans-serif;
+      }
+
+      body {
+          margin: 0;
+          padding: 0;
+      }
+
+      .codeArea {
+          position: absolute;
+          background: #000;
+          border-radius: 8px;
+          padding: 8px;
+          top: 24px;
+          bottom: 24px;
+          left: 24px;
+          width: 30%;
+          min-width: 320px;
+          opacity: 0.8;
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-template-rows: 36px 64px auto 28px;
+      }
+
+      .toolPanel, .actionPanel {
+          padding: 4px 0;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: space-between;
+          align-content: stretch;
+          align-items: center;
+      }
+
+      .toolPanel > div, .actionPanel > div {
+          flex: 0 1 auto;
+          align-self: auto;
+      }
+
+      .code {
+          font-family: monospace;
+      }
+
+      .btn {
+          background: #fff;
+          color: #662eff;
+          padding: 4px 8px;
+          margin: 0;
+          border: none;
+          box-shadow: none;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+
+      .btnActive {
+          background: #662eff;
+          color: #fff;
+      }
+
+      .canvasSettings {
+          color: #fff;
+      }
+
+      .canvasInfo {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          align-content: stretch;
+          align-items: center;
+          margin: 4px 0;
+          max-width: 320px;
+      }
+
+      .canvasInfo span {
+          width: 200px;
+          display: block;
+          flex: 1 0 130px;
+          align-self: auto;
+      }
+
+      .canvasInfo input {
+          width: auto;
+          display: block;
+          flex: 1 0 auto;
+          align-self: auto;
+      }
+
+      .drawArea {
+          border: 2px solid black;
+          background: #1e0d4c;
+          width: 80%;
+          height: 80%;
+          position: absolute;
+          top: 0;
+          left: 0;
+      }
+  </style>
+</head>
+<body>
+<div class="drawArea">
+
+</div>
+<div class="codeArea">
+  <div class="toolPanel">
+    <div class="leftArea">
+      <button type="button" id="addVideo" class="btn " title="Add new video (Alt+=)">Add Video(=)</button>
+      <button type="button" id="removeVideo" class="btn " title="Remove last video (Alt+-)">RemoveVideo(-)</button>
+    </div>
+    <div class="rightArea">
+      <button type="button" tabindex="-1" id="expand" class="btn " title="Toggle editor expansion (Alt+a)">a</button>
+      <button type="button" tabindex="-1" id="toggle" class="btn " title="Toggle editor side (Alt+h)">h</button>
+      <button type="button" tabindex="-1" id="fullscreen" class="btn " title="Go to fullscreen (Alt+f)">f</button>
+    </div>
+  </div>
+  <div class="canvasSettings">
+    <label class="canvasInfo" for="canvasWidth">
+      <span>canvas.width</span>
+      <input type="text" id="canvasWidth" value="640">
+    </label>
+    <label class="canvasInfo" for="canvasHeight">
+      <span>canvas.height</span>
+      <input type="text" id="canvasHeight" value="480">
+    </label>
+  </div>
+  <label for="code" style="display: none"></label>
+  <textarea id="code" class="code">
+{
+  width: canvas.width,
+  height: canvas.height,
+  outputFormat: 'web',
+  direction: 'ltr',
+  debug: true,
+  areas: [
+    {
+      priority: 0,
+      width: canvas.width,
+      height: canvas.height,
+      top: 0,
+      left: 0,
+      grid: [
+        { fromCount: 1, toCount: 1, colCount: 1, rowCount: 1, margin: 8 },
+        { fromCount: 2, toCount: 9, colCount: 3, rowCount: 3, margin: [4,8] }
+      ]
+    }
+  ]
+}
+  </textarea>
+  <div class="actionPanel">
+    <div class="leftArea">
+    </div>
+    <div class="rightArea">
+      <button type="button" id="run" class="btn btnActive" title="Apply schema (Alt+s)">Apply(s)</button>
+    </div>
+  </div>
+</div>
+
+<script src="../dist/index.min.js"></script>
+<script src="randomName.js"></script>
+<script>
+  const codeArea = document.querySelector('.codeArea');
+  const codeEditor = document.getElementById('code');
+  //Interface
+  let isExpanded = false;
+  let place = 'left'
+  const toggleButton = document.getElementById('toggle');
+
+  const toggleEditorSide = () => {
+    if (isExpanded) return;
+    if (place === 'right') {
+      codeArea.style.right = 'auto';
+      codeArea.style.left = '24px';
+      place = 'left';
+      return;
+    }
+    codeArea.style.left = 'auto';
+    codeArea.style.right = '24px';
+    place = 'right';
+  }
+
+  const toggleEditorExpand = () => {
+    if (isExpanded) {
+      toggleButton.removeAttribute('disabled')
+      codeArea.style.width = '30%';
+      isExpanded = false;
+      if (place === 'right') {
+        codeArea.style.right = '24px';
+        codeArea.style.left = 'auto';
+        return;
+      }
+      codeArea.style.left = '24px';
+      codeArea.style.right = 'auto';
+      return;
+    }
+    toggleButton.setAttribute('disabled', '')
+    codeArea.style.left = '24px';
+    codeArea.style.right = '24px';
+    codeArea.style.width = 'auto';
+    isExpanded = true;
+  }
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  }
+
+  toggleButton.addEventListener('click', toggleEditorSide)
+  document.getElementById('expand').addEventListener('click', toggleEditorExpand)
+  document.getElementById('fullscreen').addEventListener('click', toggleFullscreen)
+
+  const onKeyDown = (ev) => {
+    if (ev.altKey) {
+      switch (ev.code) {
+        case 'Equal':
+          addVideo();
+          break;
+        case 'Minus':
+          removeVideo();
+          break;
+        case 'KeyS':
+          commitSettings();
+          break;
+        case 'KeyA':
+          toggleEditorExpand();
+          break;
+        case 'KeyH':
+          toggleEditorSide();
+          break;
+        case 'KeyF':
+          toggleFullscreen();
+          break;
+      }
+      ev.preventDefault();
+      ev.cancelBubble = true;
+    }
+  }
+  document.addEventListener('keydown', onKeyDown);
+  const canvasWidth = document.getElementById('canvasWidth');
+  const canvasHeight = document.getElementById('canvasHeight');
+  const drawArea = document.querySelector('.drawArea');
+
+  const onCanvasChange = () => {
+    let width = canvasWidth.value;
+    if (!isNaN(width)) width += 'px';
+    let height = canvasHeight.value;
+    if (!isNaN(height)) height += 'px';
+    drawArea.style.width = width;
+    drawArea.style.height = height;
+    localStorage.setItem('testVoxCanvas', JSON.stringify({width: canvasWidth.value, height: canvasHeight.value}))
+  }
+
+  const initialCanvasValue = JSON.parse(localStorage.getItem('testVoxCanvas'));
+  if (initialCanvasValue) {
+    try {
+      canvasWidth.value = initialCanvasValue.width;
+      canvasHeight.value = initialCanvasValue.height;
+      onCanvasChange();
+    } catch (e) {
+      localStorage.removeItem('testVoxCanvas');
+    }
+  }
+
+  canvasWidth.addEventListener('blur', onCanvasChange);
+  canvasHeight.addEventListener('blur', onCanvasChange);
+
+  const initialCodeValue = localStorage.getItem('testVoxCode');
+  if (initialCodeValue) {
+    codeEditor.value = initialCodeValue;
+  }
+
+  codeEditor.addEventListener('blur', () => {
+    localStorage.setItem('testVoxCode', codeEditor.value);
+  });
+</script>
+
+<script>
+
+  const videoBank = [
+    {
+      src: 'https://webrtc.github.io/samples/src/video/chrome.mp4',
+      baseWidth: 480,
+      baseHeight: 270,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      baseWidth: 1280,
+      baseHeight: 720,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+      baseWidth: 1280,
+      baseHeight: 720,
+    },
+    {
+      src: 'https://samplelib.com/lib/preview/mp4/sample-20s.mp4',
+      baseWidth: 1920,
+      baseHeight: 1080,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      baseWidth: 1280,
+      baseHeight: 720,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+      baseWidth: 1280,
+      baseHeight: 720,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
+      baseWidth: 480,
+      baseHeight: 270,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+      baseWidth: 1280,
+      baseHeight: 720,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+      baseWidth: 1280,
+      baseHeight: 720,
+    },
+    {
+      src: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+      baseWidth: 1280,
+      baseHeight: 546,
+    },
+  ]
+
+  const currentVideoInput = [];
+
+  function composeAndRender(){
+    if(!activeTiler) return;
+    const outputData = activeTiler.compose(currentVideoInput);
+    drawArea.innerHTML = '';
+    console.error(outputData);
+    if(Array.isArray(outputData)) {
+      outputData.forEach(data => {
+        const video = document.createElement('video');
+        video.src = data.stream.src;
+        video.style.position = 'absolute';
+        video.style.width = data.width + 'px';
+        video.style.height = data.height + 'px';
+        video.style.top = data.top + 'px';
+        video.style.left = data.left + 'px';
+        video.style.backgroundColor = '#000'
+        drawArea.appendChild(video);
+        video.play();
+      })
+    }
+  }
+
+  function removeVideo(){
+    currentVideoInput.pop();
+    composeAndRender();
+  }
+  function addVideo(){
+    const id = ((Math.random() * 1000000) | 0).toString();
+    const seed = (Math.random() * videoBank.length) | 0;
+    const {baseHeight, baseWidth, src} = videoBank[seed % videoBank.length];
+    const objectFit = 'cover';
+    const area = 0;
+    const title = {
+      label: generateName(),
+      padding: 2,
+      margin: 8,
+      position: 'bottom right',
+      background: '#000000',
+      color: '#FFFFFF',
+      width: 200,
+      height:24
+    };
+    currentVideoInput.push({id, baseWidth, baseHeight, objectFit, title, area, src});
+    composeAndRender();
+  }
+
+  document.getElementById('addVideo').addEventListener('click', addVideo)
+  document.getElementById('removeVideo').addEventListener('click', removeVideo)
+
+  let activeTiler = null;
+  //Runtime
+  const runButton = document.getElementById('run');
+  const commitSettings = () => {
+    const params = codeEditor.value;
+    try {
+      const canvas = {
+        width: drawArea.clientWidth,
+        height: drawArea.clientHeight
+      }
+      let a = new Function('canvas', `return ${params};`)
+      activeTiler = VoxTiler.createTiler(a(canvas));
+      activeTiler.compose(currentVideoInput);
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+  runButton.addEventListener('click', commitSettings)
+</script>
+</body>
+</html>

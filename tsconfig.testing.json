@@ -1,0 +1,21 @@
+{
+  "ts-node": {
+    "compiler": "ttypescript"
+  },
+
+  "compilerOptions": {
+    "traceResolution": true,
+    "target": "es6",
+    "module": "CommonJS",
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
+  },
+  "include": ["**/*.spec.ts"]
+}
