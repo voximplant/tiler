@@ -1,8 +1,4 @@
 {
-  "ts-node": {
-    "compiler": "ttypescript"
-  },
-
   "compilerOptions": {
     "traceResolution": true,
     "target": "es6",

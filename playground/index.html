@@ -1,141 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>VoxTiler playground</title>
+    <meta charset="UTF-8">
+    <title>VoxTiler playground</title>
 
-  <style>
-      html {
-          padding: 0;
-          margin: 0;
-          background: #5729d0;
-          font-family: sans-serif;
-      }
+    <style>
+        html {
+            padding: 0;
+            margin: 0;
+            background: #5729d0;
+            font-family: sans-serif;
+        }
 
-      body {
-          margin: 0;
-          padding: 0;
-      }
+        body {
+            margin: 0;
+            padding: 0;
+        }
 
-      .codeArea {
-          position: absolute;
-          background: #000;
-          border-radius: 8px;
-          padding: 8px;
-          top: 24px;
-          bottom: 24px;
-          left: 24px;
-          width: 30%;
-          min-width: 320px;
-          opacity: 0.8;
-          display: grid;
-          grid-template-columns: 1fr;
-          grid-template-rows: 36px 64px auto 28px;
-      }
+        .codeArea {
+            position: absolute;
+            background: #000;
+            border-radius: 8px;
+            padding: 8px;
+            top: 24px;
+            bottom: 24px;
+            left: 24px;
+            width: 30%;
+            min-width: 320px;
+            opacity: 0.8;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 36px 64px auto 28px;
+        }
 
-      .toolPanel, .actionPanel {
-          padding: 4px 0;
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          justify-content: space-between;
-          align-content: stretch;
-          align-items: center;
-      }
+        .toolPanel, .actionPanel {
+            padding: 4px 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-content: stretch;
+            align-items: center;
+        }
 
-      .toolPanel > div, .actionPanel > div {
-          flex: 0 1 auto;
-          align-self: auto;
-      }
+        .toolPanel > div, .actionPanel > div {
+            flex: 0 1 auto;
+            align-self: auto;
+        }
 
-      .code {
-          font-family: monospace;
-      }
+        .code {
+            font-family: monospace;
+        }
 
-      .btn {
-          background: #fff;
-          color: #662eff;
-          padding: 4px 8px;
-          margin: 0;
-          border: none;
-          box-shadow: none;
-          border-radius: 4px;
-          cursor: pointer;
-      }
+        .btn {
+            background: #fff;
+            color: #662eff;
+            padding: 4px 8px;
+            margin: 0;
+            border: none;
+            box-shadow: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-      .btnActive {
-          background: #662eff;
-          color: #fff;
-      }
+        .btnActive {
+            background: #662eff;
+            color: #fff;
+        }
 
-      .canvasSettings {
-          color: #fff;
-      }
+        .canvasSettings {
+            color: #fff;
+        }
 
-      .canvasInfo {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          justify-content: flex-start;
-          align-content: stretch;
-          align-items: center;
-          margin: 4px 0;
-          max-width: 320px;
-      }
+        .canvasInfo {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-content: stretch;
+            align-items: center;
+            margin: 4px 0;
+            max-width: 320px;
+        }
 
-      .canvasInfo span {
-          width: 200px;
-          display: block;
-          flex: 1 0 130px;
-          align-self: auto;
-      }
+        .canvasInfo span {
+            width: 200px;
+            display: block;
+            flex: 1 0 130px;
+            align-self: auto;
+        }
 
-      .canvasInfo input {
-          width: auto;
-          display: block;
-          flex: 1 0 auto;
-          align-self: auto;
-      }
+        .canvasInfo input {
+            width: auto;
+            display: block;
+            flex: 1 0 auto;
+            align-self: auto;
+        }
 
-      .drawArea {
-          border: 2px solid black;
-          background: #1e0d4c;
-          width: 80%;
-          height: 80%;
-          position: absolute;
-          top: 0;
-          left: 0;
-      }
-  </style>
+        .drawArea {
+            border: 2px solid black;
+            background: #1e0d4c;
+            width: 80%;
+            height: 80%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="drawArea">
 
 </div>
 <div class="codeArea">
-  <div class="toolPanel">
-    <div class="leftArea">
-      <button type="button" id="addVideo" class="btn " title="Add new video (Alt+=)">Add Video(=)</button>
-      <button type="button" id="removeVideo" class="btn " title="Remove last video (Alt+-)">RemoveVideo(-)</button>
+    <div class="toolPanel">
+        <div class="leftArea">
+            <button type="button" id="addVideo" class="btn " title="Add new video (Alt+=)">Add Video(=)</button>
+            <button type="button" id="removeVideo" class="btn " title="Remove last video (Alt+-)">RemoveVideo(-)
+            </button>
+        </div>
+        <div class="rightArea">
+            <button type="button" tabindex="-1" id="expand" class="btn " title="Toggle editor expansion (Alt+a)">a
+            </button>
+            <button type="button" tabindex="-1" id="toggle" class="btn " title="Toggle editor side (Alt+h)">h</button>
+            <button type="button" tabindex="-1" id="fullscreen" class="btn " title="Go to fullscreen (Alt+f)">f</button>
+        </div>
     </div>
-    <div class="rightArea">
-      <button type="button" tabindex="-1" id="expand" class="btn " title="Toggle editor expansion (Alt+a)">a</button>
-      <button type="button" tabindex="-1" id="toggle" class="btn " title="Toggle editor side (Alt+h)">h</button>
-      <button type="button" tabindex="-1" id="fullscreen" class="btn " title="Go to fullscreen (Alt+f)">f</button>
+    <div class="canvasSettings">
+        <label class="canvasInfo" for="canvasWidth">
+            <span>canvas.width</span>
+            <input type="text" id="canvasWidth" value="640">
+        </label>
+        <label class="canvasInfo" for="canvasHeight">
+            <span>canvas.height</span>
+            <input type="text" id="canvasHeight" value="480">
+        </label>
     </div>
-  </div>
-  <div class="canvasSettings">
-    <label class="canvasInfo" for="canvasWidth">
-      <span>canvas.width</span>
-      <input type="text" id="canvasWidth" value="640">
-    </label>
-    <label class="canvasInfo" for="canvasHeight">
-      <span>canvas.height</span>
-      <input type="text" id="canvasHeight" value="480">
-    </label>
-  </div>
-  <label for="code" style="display: none"></label>
-  <textarea id="code" class="code">
+    <label for="code" style="display: none"></label>
+    <textarea id="code" class="code">
 {
   width: canvas.width,
   height: canvas.height,
@@ -157,13 +159,13 @@
   ]
 }
   </textarea>
-  <div class="actionPanel">
-    <div class="leftArea">
+    <div class="actionPanel">
+        <div class="leftArea">
+        </div>
+        <div class="rightArea">
+            <button type="button" id="run" class="btn btnActive" title="Apply schema (Alt+s)">Apply(s)</button>
+        </div>
     </div>
-    <div class="rightArea">
-      <button type="button" id="run" class="btn btnActive" title="Apply schema (Alt+s)">Apply(s)</button>
-    </div>
-  </div>
 </div>
 
 <script src="../dist/index.min.js"></script>
@@ -346,12 +348,12 @@
 
   const currentVideoInput = [];
 
-  function composeAndRender(){
-    if(!activeTiler) return;
+  function composeAndRender() {
+    if (!activeTiler) return;
     const outputData = activeTiler.compose(currentVideoInput);
     drawArea.innerHTML = '';
     console.error(outputData);
-    if(Array.isArray(outputData)) {
+    if (Array.isArray(outputData)) {
       outputData.forEach(data => {
         const video = document.createElement('video');
         video.src = data.stream.src;
@@ -367,11 +369,12 @@
     }
   }
 
-  function removeVideo(){
+  function removeVideo() {
     currentVideoInput.pop();
     composeAndRender();
   }
-  function addVideo(){
+
+  function addVideo() {
     const id = ((Math.random() * 1000000) | 0).toString();
     const seed = (Math.random() * videoBank.length) | 0;
     const {baseHeight, baseWidth, src} = videoBank[seed % videoBank.length];
@@ -385,7 +388,7 @@
       background: '#000000',
       color: '#FFFFFF',
       width: 200,
-      height:24
+      height: 24
     };
     currentVideoInput.push({id, baseWidth, baseHeight, objectFit, title, area, src});
     composeAndRender();

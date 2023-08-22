@@ -4,8 +4,8 @@ interface VoxTilerGridDefinition {
   colCount: number;
   rowCount: number;
   margin?: number | number[];
-  centerLast?: boolean,
-  forceAspectRatio?:number
+  centerLast?: boolean;
+  forceAspectRatio?: number;
 }
 
-export {VoxTilerGridDefinition};
+export { VoxTilerGridDefinition };

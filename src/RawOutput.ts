@@ -1,9 +1,8 @@
-import {SocketPosition} from "./SocketPosition";
-import {VoxTilerInput} from "./VoxTilerInput";
-
+import { SocketPosition } from './SocketPosition';
+import { VoxTilerInput } from './VoxTilerInput';
 
 interface RawOutput extends SocketPosition {
-  stream: VoxTilerInput
+  stream: VoxTilerInput;
 }
 
-export {RawOutput};
+export { RawOutput };

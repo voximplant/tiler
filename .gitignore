@@ -5,4 +5,12 @@ dist
 node_modules
 .nyc_output
 types
-public
+package-config.json
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+!.yarn/cache

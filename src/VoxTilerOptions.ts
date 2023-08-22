@@ -1,4 +1,4 @@
-import {VoxTilerDrawArea} from "./VoxTilerDrawArea";
+import { VoxTilerDrawArea } from './VoxTilerDrawArea';
 
 interface VoxTilerOptions {
   width: number;
@@ -10,4 +10,4 @@ interface VoxTilerOptions {
   logger?: typeof console.log;
 }
 
-export {VoxTilerOptions};
+export { VoxTilerOptions };

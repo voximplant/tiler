@@ -1,6 +1,7 @@
-import {RawOutput} from "../RawOutput";
+import { RawOutput } from '../RawOutput';
 
-function formatForWeb(input:RawOutput[]):unknown{
+function formatForWeb(input: RawOutput[]): unknown {
   return input;
 }
-export {formatForWeb}
+
+export { formatForWeb };

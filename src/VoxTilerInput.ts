@@ -1,20 +1,22 @@
-import {VoxTilerObjectFit} from "./VoxTilerObjectFit";
-import {VoxTilerPosition} from "./VoxTilerPosition";
+import { VoxTilerObjectFit } from './VoxTilerObjectFit';
+import { VoxTilerPosition } from './VoxTilerPosition';
 
 interface VoxTilerInput {
   id: string;
   baseWidth?: number;
   baseHeight?: number;
   objectFit?: VoxTilerObjectFit;
-  area?: number,
+  area?: number;
   title?: VoxTilerTitleInput;
   vad?: {
-    thickness: number,
-    color: string,
-  }
+    thickness: number;
+    color: string;
+  };
 }
-interface VoxTilerTitleInput{
+
+interface VoxTilerTitleInput {
   label: string;
+  font?: string;
   padding?: number;
   paddingTop?: number;
   paddingRight?: number;
@@ -28,8 +30,8 @@ interface VoxTilerTitleInput{
   position: VoxTilerPosition;
   background: string;
   color: string;
-  width: number,
-  height: number
+  width: number;
+  height: number;
 }
 
-export {VoxTilerInput,VoxTilerTitleInput}
+export { VoxTilerInput, VoxTilerTitleInput };

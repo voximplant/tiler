@@ -1,6 +1,6 @@
-import {VoxTilerOptions} from "./VoxTilerOptions";
-import {VoxTilerDrawArea} from "./VoxTilerDrawArea";
-import {VoxTilerGridDefinition} from "./VoxTilerGridDefinition";
+import { VoxTilerOptions } from './VoxTilerOptions';
+import { VoxTilerDrawArea } from './VoxTilerDrawArea';
+import { VoxTilerGridDefinition } from './VoxTilerGridDefinition';
 
 export function makeId(length: number): string {
   let result = '';
@@ -14,7 +14,7 @@ export function makeId(length: number): string {
 
 function numberOrZero(input: unknown): number {
   if (isNumber(input)) {
-    return input as number
+    return input as number;
   }
   return 0;
 }
@@ -90,16 +90,24 @@ function validateLayoutArea(area: VoxTilerDrawArea, index: number): void {
 
 function validateLayoutGrid(grid: VoxTilerGridDefinition, index: number, areaIndex: number): void {
   if (!isNumber(grid.fromCount) || grid.fromCount <= 0) {
-    throw TypeError(`layoutOptions.area[${areaIndex}].grid[${index}].fromCount is not a positive number`);
+    throw TypeError(
+      `layoutOptions.area[${areaIndex}].grid[${index}].fromCount is not a positive number`
+    );
   }
   if (!isNumber(grid.toCount) || grid.toCount <= 0) {
-    throw TypeError(`layoutOptions.area[${areaIndex}].grid[${index}].toCount is not a positive number`);
+    throw TypeError(
+      `layoutOptions.area[${areaIndex}].grid[${index}].toCount is not a positive number`
+    );
   }
   if (!isNumber(grid.colCount) || grid.colCount <= 0) {
-    throw TypeError(`layoutOptions.area[${areaIndex}].grid[${index}].colCount is not a positive number`);
+    throw TypeError(
+      `layoutOptions.area[${areaIndex}].grid[${index}].colCount is not a positive number`
+    );
   }
   if (!isNumber(grid.rowCount) || grid.rowCount <= 0) {
-    throw TypeError(`layoutOptions.area[${areaIndex}].grid[${index}].rowCount is not a positive number`);
+    throw TypeError(
+      `layoutOptions.area[${areaIndex}].grid[${index}].rowCount is not a positive number`
+    );
   }
 }
 
@@ -112,21 +120,24 @@ function getLengthWithoutMargins(length: number, margin: number, itemCount: numb
   return length - margin * (itemCount + 1);
 }
 
-export function calculateSocketLinearSize(length: number, margin: number, itemCount: number): [number, number] {
+export function calculateSocketLinearSize(
+  length: number,
+  margin: number,
+  itemCount: number
+): [number, number] {
   const lengthWithoutMargins = getLengthWithoutMargins(length, margin, itemCount);
   const socket = (lengthWithoutMargins / itemCount) | 0;
   const hRoundPixel = getRoundPixel(lengthWithoutMargins, socket, itemCount);
-  return [socket, hRoundPixel]
+  return [socket, hRoundPixel];
 }
 
-export function fixSocketAspectRatio([sWidth, lRoundPixel]: [number, number], [sHeight, tRoundPixel]: [number, number], {
-  forceAspectRatio,
-  colCount,
-  rowCount
-}: VoxTilerGridDefinition, {
-                                       width,
-                                       height
-                                     }: VoxTilerDrawArea, margins: [number, number]): [number, number, number, number] {
+export function fixSocketAspectRatio(
+  [sWidth, lRoundPixel]: [number, number],
+  [sHeight, tRoundPixel]: [number, number],
+  { forceAspectRatio, colCount, rowCount }: VoxTilerGridDefinition,
+  { width, height }: VoxTilerDrawArea,
+  margins: [number, number]
+): [number, number, number, number] {
   if (!forceAspectRatio || sWidth / sHeight === forceAspectRatio) {
     return [sWidth, sHeight, lRoundPixel, tRoundPixel];
   }
@@ -134,15 +145,14 @@ export function fixSocketAspectRatio([sWidth, lRoundPixel]: [number, number], [s
     const lengthWithoutMargins = getLengthWithoutMargins(width, margins[0], colCount);
     const newWidth = (sHeight * forceAspectRatio) | 0;
     const newLRoundPixel = getRoundPixel(lengthWithoutMargins, newWidth, colCount);
-    console.error([newWidth, sHeight, newLRoundPixel, tRoundPixel], sHeight, forceAspectRatio)
+    console.error([newWidth, sHeight, newLRoundPixel, tRoundPixel], sHeight, forceAspectRatio);
     return [newWidth, sHeight, newLRoundPixel, tRoundPixel];
   } else {
     const lengthWithoutMargins = getLengthWithoutMargins(height, margins[1], rowCount);
     const newHeight = (sWidth / forceAspectRatio) | 0;
     const newTRoundPixel = getRoundPixel(lengthWithoutMargins, newHeight, rowCount);
-    console.error([sWidth, newHeight, lRoundPixel, newTRoundPixel], sWidth, forceAspectRatio)
+    console.error([sWidth, newHeight, lRoundPixel, newTRoundPixel], sWidth, forceAspectRatio);
     return [sWidth, newHeight, lRoundPixel, newTRoundPixel];
-
   }
 }
 
