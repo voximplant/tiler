@@ -216,7 +216,7 @@ function generateLabelWithRectangle(params: {
       targetLabelX = baseRect.x + baseRect.w - margins.marginRight - targetLabelW;
       break;
     case 'center':
-      targetLabelX = baseRect.x + baseRect.x / 2 - targetLabelW / 2;
+      targetLabelX = baseRect.x + baseRect.w / 2 - targetLabelW / 2;
       break;
     default:
       targetLabelX = baseRect.x + baseRect.w - margins.marginRight - targetLabelW;
